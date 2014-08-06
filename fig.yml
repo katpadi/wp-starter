@@ -1,0 +1,13 @@
+mysql:
+  image: orchardup/mysql
+  environment:
+    MYSQL_DATABASE: wordpress # change to whatever name
+    MYSQL_ROOT_PASSWORD:
+wordpress:
+  build: .
+  links:
+    - mysql:mysql
+  ports:
+    - "8888:80" # change this to whatever port
+  volumes:
+    - "wp-content:/var/www/html/wp-content" # change_me wp-content to the name of your wp-content

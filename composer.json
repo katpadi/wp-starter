@@ -1,0 +1,34 @@
+{
+    "name": "katpadi/wp-starter-wordpress-site",
+    "description": "WordPress Starter site",
+    "authors": [
+        {
+            "name": "Kat Padilla",
+            "email": "hello@katpadi.ph",
+            "homepage": "http://katpadi.ph",
+            "role": "Developer"
+        }
+    ],
+    "repositories":[
+    {
+        "type":"composer",
+        "url":"http://wpackagist.org"
+    }
+    ],
+    "config" : {
+        "vendor-dir" : "wp-content/vendor"
+    },
+    "require": {
+        "wpackagist-plugin/contact-form-7": "*",
+        "wpackagist-plugin/advanced-custom-fields": "*"
+    },
+    "require-dev": {
+        "wpackagist-plugin/blackbox-debug-bar": "*",
+        "wpackagist-plugin/theme-check": "*"
+    },
+    "extra" : {
+        "installer-paths" : {
+            "wp-content/plugins/{$name}/": ["type:wordpress-plugin"]
+        }
+    }
+}
