@@ -2,24 +2,39 @@
 # Set up whatever shit
 for arg in "$@"
 do
-	if [ "$arg" = "theme" ]
+	# Check if it's not the first time
+	who_owns=`ls -ld wp-content | awk '{print $3}'`
+	# If it's not www-data, there's not problem
+	if [ "$who_owns" != "www-data" ]
 	then
-	    echo "Setting up _s..."
-		chmod -R 777 wp-content
-		curl -L https://github.com/Automattic/_s/archive/master.tar.gz | tar xz
-		mv _s-master _s
-		mv _s/ wp-content/themes/
-	elif [ "$arg" = "plugin" ]
-	then
-		echo "Setting up Tom McFarlin's plugin boilerplate..."
-		chmod -R 777 wp-content
-		curl -L https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/archive/master.tar.gz | tar xz
-		mv WordPress-Plugin-Boilerplate-master WordPress-Plugin-Boilerplate
-		mv WordPress-Plugin-Boilerplate/plugin-name/ wp-content/plugins/
-		rm -rf WordPress-Plugin-Boilerplate/
+		if [ "$arg" = "theme" ]
+		then
+		    echo "Setting up _s..."
+			chmod -R 777 wp-content
+			curl -L https://github.com/Automattic/_s/archive/master.tar.gz | tar xz
+			mv _s-master _s
+			# wont overwrite, promise
+			mv --backup=t _s/ wp-content/themes/
+		elif [ "$arg" = "plugin" ]
+		then
+			echo "Setting up Tom McFarlin's plugin boilerplate..."
+			chmod -R 777 wp-content
+			curl -L https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/archive/master.tar.gz | tar xz
+			mv WordPress-Plugin-Boilerplate-master WordPress-Plugin-Boilerplate
+			mv --backup=t WordPress-Plugin-Boilerplate/plugin-name/ wp-content/plugins/
+			rm -rf WordPress-Plugin-Boilerplate/
+		else
+			# do normal startup
+		    continue
+		fi
 	else
-		# do normal startup
-	    continue
+		echo "WARNING: Can't continue. Needs human intervention"
+		echo "BLOCKER: wp-content is owned by www-data"
+		echo "Run this command first:"
+		echo "######################";
+		echo "\nsudo chown -R \"${USER}:\" wp-content\n"
+		echo "######################";
+		exit
 	fi
 done
 # fig stuff
